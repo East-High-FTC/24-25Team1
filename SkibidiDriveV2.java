@@ -38,6 +38,16 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
         telemetry.addData("Status", "Running");
         telemetry.update();
+        if(this.gamepad1.b)
+        {
+          telemetry.addData("Status:", "Broken!");
+          telemetry.update();
+          bb();
+        }
+        if(this.gamepad1.x)
+        {
+          hitBreaks(); // is this break or the brake button?!?!?!?!?
+        }
       // Put run blocks here.
       }
     }
@@ -121,7 +131,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     }
     else if (power <0) // kounter klock wise
     {
-          frontleft.setDirection(DcMotor.Direction.REVERSE); 
+        frontleft.setDirection(DcMotor.Direction.REVERSE); 
         backleft.setDirection(DcMotor.Direction.FORWARD); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
         frontright.setDirection(DcMotor.Direction.FORWARD);
         backright.setDirection(DcMotor.Direction.REVERSE); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
@@ -146,8 +156,17 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     forwardBackward(ryJoyStickPos, rxJoyStickPos);
     rightLeft(rxJoyStickPos, ryJoyStickPos);
     rotate(lxJoyStickPos, lyJoyStickPos);
-    telemetry.addData("Right Power:", ryJoyStickPos);
+    telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
+  }
+  private void hitBreaks()
+  {
+    telemetry.addData("Status","Emergency Breaks Activated!");
+    telemetry.update();
+    backleft.setPower(0);
+    backleft.setPower(0);
+    backleft.setPower(0);
+    backleft.setPower(0);
   }
 }
