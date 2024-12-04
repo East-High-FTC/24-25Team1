@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "SkibidiDrive (Blocks to Java)")
-public class SkibidiDrive extends LinearOpMode {
+@TeleOp(name = "SkibidiDriveBuiltBackBetter (Blocks to Java)")
+public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
 
   private DcMotor backleft;
   private DcMotor backright;
@@ -35,11 +35,11 @@ public class SkibidiDrive extends LinearOpMode {
     if (opModeIsActive()) {
       while (opModeIsActive()) {
         // Put loop blocks here.
-        setUpInputs();
+        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
         telemetry.addData("Status", "Running");
         telemetry.update();
       // Put run blocks here.
-     
+      }
     }
   }
 
@@ -118,7 +118,6 @@ public class SkibidiDrive extends LinearOpMode {
         backleft.setDirection(DcMotor.Direction.FORWARD);
         frontright.setDirection(DcMotor.Direction.REVERSE);
         backright.setDirection(DcMotor.Direction.REVERSE);
-
     }
     else if (power <0) // kounter klock wise
     {
@@ -136,24 +135,17 @@ public class SkibidiDrive extends LinearOpMode {
     telemetry.addData("Rotation Power", power);
     telemetry.update();
   }
-}
-private void setUpInputs()
+  private void setUpInputs(double ryJoyStickPos, double rxJoyStickPos,
+  double lyJoyStickPos, double lxJoyStickPos)
 {
     ryJoyStickPos = this.gamepad1.right_stick_y;
     rxJoyStickPos = -this.gamepad1.right_stick_x;
     lxJoyStickPos = -this.gamepad1.left_stick_x;
     lyJoyStickPos = -this.gamepad1.left_stick_y;
    
-    if(this.gamepad1.b)
-    {
-      bb();
-      else
-      {
-          forwardBackward(ryJoyStickPos, rxJoyStickPos);
-          rightLeft(rxJoyStickPos, ryJoyStickPos);
-          rotate(lxJoyStickPos, lyJoyStickPos);
-      }
-    }
+    forwardBackward(ryJoyStickPos, rxJoyStickPos);
+    rightLeft(rxJoyStickPos, ryJoyStickPos);
+    rotate(lxJoyStickPos, lyJoyStickPos);
     telemetry.addData("Right Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
