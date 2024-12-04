@@ -114,17 +114,17 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     //set motor directions for rotation & clockwise/counter clockwise rotation
     if(power > 0) //qlock wise
     {
-        frontleft.setDirection(DcMotor.Direction.FORWARD);
-        backleft.setDirection(DcMotor.Direction.FORWARD);
+        frontleft.setDirection(DcMotor.Direction.FORWARD); 
+        backleft.setDirection(DcMotor.Direction.REVERSE); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
         frontright.setDirection(DcMotor.Direction.REVERSE);
-        backright.setDirection(DcMotor.Direction.REVERSE);
+        backright.setDirection(DcMotor.Direction.FORWARD); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
     }
     else if (power <0) // kounter klock wise
     {
-        frontleft.setDirection(DcMotor.Direction.REVERSE);
-        backleft.setDirection(DcMotor.Direction.REVERSE);
+          frontleft.setDirection(DcMotor.Direction.REVERSE); 
+        backleft.setDirection(DcMotor.Direction.FORWARD); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
         frontright.setDirection(DcMotor.Direction.FORWARD);
-        backright.setDirection(DcMotor.Direction.FORWARD);
+        backright.setDirection(DcMotor.Direction.REVERSE); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
     }
     //set power
     backleft.setPower(Math.abs(power));
