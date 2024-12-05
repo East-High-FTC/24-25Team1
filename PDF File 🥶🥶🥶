@@ -7,4 +7,61 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "EggIncGrind (Blocks to Java)")
 public class EggIncGrind extends LinearOpMode {
+  private DcMotor bottomarm;
+  private DcMotor toparm;
+  private DcMotor claw;
+
+  @Override
+  public void runOpMode() {
+    bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
+    toparm = hardwareMap.get(DcMotor.class, "top arm");
+    claw = hardwareMap.get(DcMotor.class, "claw");
+
+//DONT COPY
+
+    // Put initialization blocks here. aka configuring motor stuff
+    initialization();
+    telemetry.addData("Status", "Initialized");
+    telemetry.update();
+    // Wait for the game to start (driver presses PLAY)
+    waitForStart();
+    double lyJoyStickPos = 0;
+    double ryJoyStickPos = 0;
+    double lxJoyStickPos = 0;
+    double rxJoyStickPos = 0;
+    if (opModeIsActive()) {
+      while (opModeIsActive()) {
+        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
+        telemetry.addData("Status", "Running");
+        telemetry.update();
+    
+//COPY
+
+
+      
+        if(this.gamepad2.right_bumper) //open claw
+        {
+
+        }
+
+        if(this.gamepad2.left_bumper) //close claw
+        {
+
+        }
+    }
+  }
+}
+
+//use this after runopmode
+
+//setup motors
+  private void arminitialization() {
+    bottomarm.setDirection(DcMotor.Direction.FORWARD);
+    toparm.setDirection(DcMotor.Direction.FORWARD);
+    claw.setDirection(DcMotor.Direction.FORWARD);
+  }
+
+
+
+
 }
