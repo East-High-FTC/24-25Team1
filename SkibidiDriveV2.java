@@ -48,7 +48,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
           hitBreaks(); // is this break or the brake button?!?!?!?!?
         }
-        if(this.gamepad1.right_bumper)
+        if(this.gamepad1.right_trigger)
         {
           motorSpeed = 0.5;
         }
