@@ -1,1 +1,10 @@
 //arm code cause i said i would make it and now i regret it
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+@TeleOp(name = "EggIncGrind (Blocks to Java)")
+public class EggIncGrind extends LinearOpMode {
+}
