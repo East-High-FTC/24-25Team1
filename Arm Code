@@ -10,12 +10,16 @@ public class EggIncGrind extends LinearOpMode {
   private DcMotor bottomarm;
   private DcMotor toparm;
   private DcMotor claw;
+  private DcMotor clawrotate;
 
   @Override
   public void runOpMode() {
+
+
     bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
     toparm = hardwareMap.get(DcMotor.class, "top arm");
     claw = hardwareMap.get(DcMotor.class, "claw");
+    clawrotate = hardwareMap.get(DcMotor.class, "claw rotation");
 
 //DONT COPY
 
@@ -41,13 +45,14 @@ public class EggIncGrind extends LinearOpMode {
       
         if(this.gamepad2.right_trigger) //open claw
         {
-
+          open();
         }
 
         if(this.gamepad2.left_trigger) //close claw
         {
-
+          close();
         }
+
     }
   }
 }
@@ -60,7 +65,11 @@ public class EggIncGrind extends LinearOpMode {
     toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setDirection(DcMotor.Direction.FORWARD);
   }
+  private void close()
+  {
 
+
+  }
 
 
 
