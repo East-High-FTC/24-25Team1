@@ -50,11 +50,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         }
         if(this.gamepad1.right_trigger)
         {
-          motorSpeed = 0.5;
+          motorSpeed = 0.5; // change
         }
         else
         {
-          motorSpeed = 1.0;
+          motorSpeed = 1.0; //change
         }
       // Put run blocks here.
       }
