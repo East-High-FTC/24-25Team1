@@ -173,8 +173,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     telemetry.addData("Status","Emergency Breaks Activated!");
     telemetry.update();
     backleft.setPower(0);
-    backleft.setPower(0);
-    backleft.setPower(0);
-    backleft.setPower(0);
+    backright.setPower(0);
+    frontleft.setPower(0);
+    frontright.setPower(0);
   }
 }
