@@ -111,10 +111,36 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontright.setPower(power);
     }
   }
-  private void diagonal()
+  //stuff evan made
+  private void diagonalLeft(double power, double )
   {
-    
+      if(power < 0 && (fpower > .2)) //diagonal left down
+    {    
+      //reset directions
+      initialization();
+      frontleft.setDirection(DcMotor.Direction.REVERSE);
+      backright.setDirection(DcMotor.Direction.FORWARD);
+     
+      backleft.setPower(0);
+      backright.setPower(power);
+      frontleft.setPower(power);
+      frontright.setPower(0);
+    }
+    else if (power < 0 && (fpower < -.2))//left up
+    {
+      //reset directions
+      initialization();
+      frontright.setDirection(DcMotor.Direction.REVERSE);
+      backleft.setDirection(DcMotor.Direction.FORWARD);
+      backleft.setPower(power);
+      backright.setPower(0);
+      frontleft.setPower(0);
+      frontright.setPower(power);
+    }
+
+  
   }
+  //evan didnt write this
   private void bb()
   {
     double power = 0;
@@ -167,7 +193,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
    
     forwardBackward(ryJoyStickPos, rxJoyStickPos);
     rightLeft(rxJoyStickPos, ryJoyStickPos);
-    diagonal(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
+    diagonalRight(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
+    diagonalLeft(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
     rotate(lxJoyStickPos, lyJoyStickPos);
     telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
