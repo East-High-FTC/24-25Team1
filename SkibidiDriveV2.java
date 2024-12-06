@@ -111,6 +111,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontright.setPower(power);
     }
   }
+  private void diagonal()
+  {
+    
+  }
   private void bb()
   {
     double power = 0;
@@ -163,6 +167,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
    
     forwardBackward(ryJoyStickPos, rxJoyStickPos);
     rightLeft(rxJoyStickPos, ryJoyStickPos);
+    diagonal(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
     rotate(lxJoyStickPos, lyJoyStickPos);
     telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
