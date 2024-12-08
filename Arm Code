@@ -52,6 +52,14 @@ public class EggIncGrind extends LinearOpMode {
         {
           close();
         }
+        if(this.gamepad2.right_bumper) //move claw
+        {
+          rotateClawCounterClockwise();
+        }
+        if(this.gamepad2.left_bumper) //move claw
+        {
+          rotateClawClockwise();
+        }
 
     }
   }
@@ -75,6 +83,16 @@ public class EggIncGrind extends LinearOpMode {
   {
     claw.setDirection(DcMotor.Direction.REVERSE);
     claw.setPower(0.5);
+  }
+  private void rotateArmClockwise()
+  {
+    clawrotate.setDirection(DcMotor.Direction.FORWARD);
+    clawrotate.setPower(0.5);
+  }
+  private void rotateArmCounterClockwise()
+  {
+    clawrotate.setDirection(DcMotor.Direction.REVERSE);
+    clawrotate.setPower(0.5);
   }
   private void moveArm()
 
