@@ -64,12 +64,19 @@ public class EggIncGrind extends LinearOpMode {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
     toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setDirection(DcMotor.Direction.FORWARD);
+    clawrotate.setDirection(DcMotor.Direction.FORWARD);
   }
   private void close()
   {
-
-
+    claw.setDirection(DcMotor.Direction.FORWARD);
+    claw.setPower(0.5);
   }
+  private void open()
+  {
+    claw.setDirection(DcMotor.Direction.REVERSE);
+    claw.setPower(0.5);
+  }
+
 
 
 
