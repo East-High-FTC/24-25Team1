@@ -59,8 +59,8 @@ public class EggIncGrind extends LinearOpMode {
 
 //use this after runopmode
 
-//setup motors
-  private void arminitialization() {
+//setup motors dont forget to add the armInitialization() earlier
+  private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
     toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setDirection(DcMotor.Direction.FORWARD);
@@ -76,8 +76,23 @@ public class EggIncGrind extends LinearOpMode {
     claw.setDirection(DcMotor.Direction.REVERSE);
     claw.setPower(0.5);
   }
+  private void moveArm()
 
 
 
 
+  private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
+  double lyJoyStickPosARM, double lxJoyStickPosARM)
+{
+    ryJoyStickPosARM = this.gamepad2.right_stick_y;
+    rxJoyStickPosARM = -this.gamepad2.right_stick_x;
+    lxJoyStickPosARM = -this.gamepad2.left_stick_x;
+    lyJoyStickPosARM = -this.gamepad2.left_stick_y;
+   
+    moveArm(ryJoyStickPosARM, rxJoyStickPosARM);
+    moveForearm(lxJoyStickPosARM, lyJoyStickPosARM);
+    //telemetry.addData("Go Power:", ryJoyStickPos);
+    //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
+    telemetry.update();
+  }
 }
