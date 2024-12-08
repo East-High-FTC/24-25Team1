@@ -112,7 +112,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     }
   }
   //stuff evan made
-  private void diagonalLeft(double power, double )
+  private void diagonalLeft(double power, double fpower)
   {
       if(power < 0 && (fpower > .2)) //diagonal left down
     {    
@@ -130,15 +130,39 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     {
       //reset directions
       initialization();
-      frontright.setDirection(DcMotor.Direction.REVERSE);
-      backleft.setDirection(DcMotor.Direction.FORWARD);
+      frontright.setDirection(DcMotor.Direction.FORWARD);
+      backleft.setDirection(DcMotor.Direction.REVERSE);
       backleft.setPower(power);
       backright.setPower(0);
       frontleft.setPower(0);
       frontright.setPower(power);
     }
-
-  
+  }
+  private void diagonalRight(double power, double fpower)
+  {
+      if(power > 0 && (fpower > .2)) //diagonal right down
+    {    
+      //reset directions
+      initialization();
+      frontright.setDirection(DcMotor.Direction.REVERSE);
+      backleft.setDirection(DcMotor.Direction.FORWARD);
+     
+      backleft.setPower(power);
+      backright.setPower(0);
+      frontleft.setPower(0);
+      frontright.setPower(power);
+    }
+    else if (power > 0 && (fpower < -.2))//right up
+    {
+      //reset directions
+      initialization();
+      frontleft.setDirection(DcMotor.Direction.FORWARD);
+      backright.setDirection(DcMotor.Direction.REVERSE);
+      backleft.setPower(0);
+      backright.setPower(power);
+      frontleft.setPower(power);
+      frontright.setPower(0);
+    }
   }
   //evan didnt write this
   private void bb()
