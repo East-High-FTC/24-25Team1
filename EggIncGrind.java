@@ -107,6 +107,8 @@ public class EggIncGrind extends LinearOpMode {
       bottomarm.setPower(powerarm * 0.5);
     }
   }
+  //make up and down on the left stick move the top half of the arm 
+  //make up and down on the right stick move the bottom half of the arm 
   private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
   double lyJoyStickPosARM, double lxJoyStickPosARM)
 {
