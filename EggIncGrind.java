@@ -8,18 +8,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp(name = "EggIncGrind (Blocks to Java)")
 public class EggIncGrind extends LinearOpMode {
   private DcMotor bottomarm;
-  private DcMotor toparm;
-  private DcMotor claw;
-  private DcMotor clawrotate;
+  private Servo toparm;
+  private Servo claw;
+  private Servo clawrotate;
 
   @Override
   public void runOpMode() {
 
 
     bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
-    toparm = hardwareMap.get(DcMotor.class, "top arm");
-    claw = hardwareMap.get(DcMotor.class, "claw");
-    clawrotate = hardwareMap.get(DcMotor.class, "claw rotation");
+    toparm = hardwareMap.get(Servo.class, "top arm");
+    claw = hardwareMap.get(Servo.class, "claw");
+    clawrotate = hardwareMap.get(Servo.class, "claw rotation");
 
 //DONT COPY
 
@@ -36,6 +36,7 @@ public class EggIncGrind extends LinearOpMode {
     if (opModeIsActive()) {
       while (opModeIsActive()) {
         setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
+        setUpArmInputs(ryJoyStickPosARM, rxJoyStickPosARM, lyJoyStickPosARM, lxJoyStickPosARM);
         telemetry.addData("Status", "Running");
         telemetry.update();
     
@@ -76,22 +77,22 @@ public class EggIncGrind extends LinearOpMode {
   }
   private void close()
   {
-    claw.setDirection(DcMotor.Direction.FORWARD);
+    claw.setPosition(Servo.Direction.FORWARD);
     claw.setPower(0.5);
   }
   private void open()
   {
-    claw.setDirection(DcMotor.Direction.REVERSE);
+    claw.setPosition(Servo.Direction.REVERSE);
     claw.setPower(0.5);
   }
   private void rotateArmClockwise()
   {
-    clawrotate.setDirection(DcMotor.Direction.FORWARD);
+    clawrotate.setPosition(Servo.);
     clawrotate.setPower(0.5);
   }
   private void rotateArmCounterClockwise()
   {
-    clawrotate.setDirection(DcMotor.Direction.REVERSE);
+    clawrotate.setDirection(Servo.Direction.REVERSE);
     clawrotate.setPower(0.5);
   }
   private void moveArm(double powerarm, double fpowerarm)
