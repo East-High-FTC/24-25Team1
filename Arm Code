@@ -94,11 +94,19 @@ public class EggIncGrind extends LinearOpMode {
     clawrotate.setDirection(DcMotor.Direction.REVERSE);
     clawrotate.setPower(0.5);
   }
-  private void moveArm()
-
-
-
-
+  private void moveArm(double powerarm, double fpowerarm)
+  {
+    if(powerarm < 0 && (fpowerarm > -.1 && fpowerarm < 0.1))
+    {
+      bottomarm.setDirection(DcMotor.Direction.FORWARD);
+      bottomarm.setPower(powerarm * 0.5);
+    }
+    else if(powerarm > 0 && (fpowerarm > -.1 && fpowerarm < 0.1))
+    {
+      bottomarm.setDirection(DcMotor.Direction.REVERSE);
+      bottomarm.setPower(powerarm * 0.5);
+    }
+  }
   private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
   double lyJoyStickPosARM, double lxJoyStickPosARM)
 {
