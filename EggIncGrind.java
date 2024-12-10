@@ -1,4 +1,8 @@
 //arm code cause i said i would make it and now i regret it
+/**
+IMPORTANT LINK TO TEACH YOU SERVOS 
+https://ftc-docs.firstinspires.org/en/latest/programming_resources/tutorial_specific/onbot_java/controlling_a_servo/Controlling-a-Servo-%28OnBot-Java%29.html
+**/
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
