@@ -69,22 +69,20 @@ public class EggIncGrind extends LinearOpMode {
 //setup motors dont forget to add the armInitialization() earlier
   private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
-    toparm.setDirection(DcMotor.Direction.FORWARD);
+    toparm.setPosition(0);
     claw.setDirection(DcMotor.Direction.FORWARD);
     clawrotate.setDirection(DcMotor.Direction.FORWARD);
   }
   private void close()
   {
-    claw.setPosition(Servo.Direction.FORWARD);
-    claw.setPower(0.5);
+    claw.setPosition(1);
   }
   private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
-    claw.setPosition();
+    claw.setPosition(0); // in theory its 0 or 1 but we have to test it.
   }
   private void rotateArmClockwise()
   {
-    clawrotate.setPosition(Servo.);
     clawrotate.setPower(0.5);
   }
   private void rotateArmCounterClockwise()
