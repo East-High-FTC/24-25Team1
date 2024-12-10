@@ -28,44 +28,38 @@ public class EggIncGrind extends LinearOpMode {
 //DONT COPY
 
     // Put initialization blocks here. aka configuring motor stuff
-    initialization();
-    telemetry.addData("Status", "Initialized");
+    armInitialization();
+    telemetry.addData("Status", "Servors Initialized");
     telemetry.update();
     // Wait for the game to start (driver presses PLAY)
     waitForStart();
-    double lyJoyStickPos = 0;
-    double ryJoyStickPos = 0;
-    double lxJoyStickPos = 0;
-    double rxJoyStickPos = 0;
+    double lyJoyStickPosArm = 0;
+    double ryJoyStickPosArm = 0;
+    double lxJoyStickPosArm = 0;
+    double rxJoyStickPosArm = 0;
     if (opModeIsActive()) {
       while (opModeIsActive()) {
         setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
         setUpArmInputs(ryJoyStickPosARM, rxJoyStickPosARM, lyJoyStickPosARM, lxJoyStickPosARM);
-        telemetry.addData("Status", "Running");
-        telemetry.update();
-    
-//COPY
 
-
+        if(ryJoyStickPosArm > 0)
+        {
+          rotateClawCounterClockwise();
+        }
+        else if (ryJoyStickPosArm < 0)
+        {
+          rotateClawClockwise();
+        }
       
-        if(this.gamepad2.right_trigger) //open claw
+        if(this.gamepad2.a) //open claw
         {
           open();
         }
 
-        if(this.gamepad2.left_trigger) //close claw
+        if(this.gamepad2.a) //close claw
         {
           close();
         }
-        if(this.gamepad2.right_bumper) //move claw
-        {
-          rotateClawCounterClockwise();
-        }
-        if(this.gamepad2.left_bumper) //move claw
-        {
-          rotateClawClockwise();
-        }
-
     }
   }
 }
@@ -84,10 +78,9 @@ public class EggIncGrind extends LinearOpMode {
     claw.setPosition(Servo.Direction.FORWARD);
     claw.setPower(0.5);
   }
-  private void open()
+  private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
-    claw.setPosition(Servo.Direction.REVERSE);
-    claw.setPower(0.5);
+    claw.setPosition();
   }
   private void rotateArmClockwise()
   {
