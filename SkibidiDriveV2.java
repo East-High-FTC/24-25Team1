@@ -87,7 +87,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   }
   private void rightLeft(double power, double fpower)
   {
-    if(power < 0 && (fpower > -.1 && fpower < 0.1))//left
+    if(power < 0 && (fpower > -.2 && fpower < 0.2))//left
     {    
       //reset directions
       initialization();
@@ -99,7 +99,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontleft.setPower(power);
       frontright.setPower(power);
     }
-    else if (power > 0 && (fpower > -.1 && fpower < 0.1))//right
+    else if (power > 0 && (fpower > -.2 && fpower < 0.2))//right
     {
       //reset directions
       initialization();
@@ -112,9 +112,9 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     }
   }
   //stuff evan made
-  private void diagonalLeft(double power, double fpower)
+  private void diagonalLeft(double power, double lpower)
   {
-      if(power < 0 && (fpower > .2)) //diagonal left down
+      if(power < 0 && (lpower > .2)) //diagonal left down
     {    
       //reset directions
       initialization();
@@ -122,45 +122,45 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       backright.setDirection(DcMotor.Direction.FORWARD);
      
       backleft.setPower(0);
-      backright.setPower(power);
-      frontleft.setPower(power);
+      backright.setPower(power + lpower);
+      frontleft.setPower(power + lpower);
       frontright.setPower(0);
     }
-    else if (power < 0 && (fpower < -.2))//left up
+    else if (power < 0 && (lpower < -.2))//left up
     {
       //reset directions
       initialization();
       frontright.setDirection(DcMotor.Direction.FORWARD);
       backleft.setDirection(DcMotor.Direction.REVERSE);
-      backleft.setPower(power);
+      backleft.setPower(power + lpower);
       backright.setPower(0);
       frontleft.setPower(0);
-      frontright.setPower(power);
+      frontright.setPower(power + lpower);
     }
   }
-  private void diagonalRight(double power, double fpower)
+  private void diagonalRight(double power, double lpower)
   {
-      if(power > 0 && (fpower > .2)) //diagonal right down
+      if(power > 0 && (lpower > .2)) //diagonal right down
     {    
       //reset directions
       initialization();
       frontright.setDirection(DcMotor.Direction.REVERSE);
       backleft.setDirection(DcMotor.Direction.FORWARD);
      
-      backleft.setPower(power);
+      backleft.setPower(power + lpower);
       backright.setPower(0);
       frontleft.setPower(0);
-      frontright.setPower(power);
+      frontright.setPower(power + lpower);
     }
-    else if (power > 0 && (fpower < -.2))//right up
+    else if (power > 0 && (lpower < -.2))//right up
     {
       //reset directions
       initialization();
       frontleft.setDirection(DcMotor.Direction.FORWARD);
       backright.setDirection(DcMotor.Direction.REVERSE);
       backleft.setPower(0);
-      backright.setPower(power);
-      frontleft.setPower(power);
+      backright.setPower(power + lpower);
+      frontleft.setPower(power + lpower);
       frontright.setPower(0);
     }
   }
