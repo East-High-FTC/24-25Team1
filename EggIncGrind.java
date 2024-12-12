@@ -2,6 +2,8 @@
 /**
 IMPORTANT LINK TO TEACH YOU SERVOS 
 https://ftc-docs.firstinspires.org/en/latest/programming_resources/tutorial_specific/onbot_java/controlling_a_servo/Controlling-a-Servo-%28OnBot-Java%29.html
+!!! READ DESCRIPTION !!!
+(The three dots next to the file name on git hub)
 **/
 package org.firstinspires.ftc.teamcode;
 
