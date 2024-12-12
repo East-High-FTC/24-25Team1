@@ -298,6 +298,17 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       bottomarm.setPower(-1);
     }
   }
+    private void moveTopArm(double powerarm)
+  {
+    if(powerarm > 0) // raises arm
+    {
+      toparm.setPower(powerarm * 2);
+    }
+    else if(powerarm < 0) // lowers arm
+    {
+      toparm.setPower(powerarm * 2);
+    }
+  }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
   private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
@@ -309,7 +320,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     lyJoyStickPosARM = -this.gamepad2.left_stick_y;
    
     moveArm(ryJoyStickPosARM);
-    //moveForearm(lxJoyStickPosARM, lyJoyStickPosARM);
+    moveTopArm(lyJoyStickPosARM);
     //telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
