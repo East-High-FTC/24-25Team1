@@ -8,22 +8,24 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp(name = "EggIncGrind (Blocks to Java)")
 public class EggIncGrind extends LinearOpMode {
   private DcMotor bottomarm;
-  private Servo toparm;
+  private CRServo toparm;
   private Servo claw;
-  private Servo clawrotate;
+  private CRServo clawrotate;
 
   @Override
   public void runOpMode() {
 
 
     bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
-    toparm = hardwareMap.get(Servo.class, "top arm");
+    toparm = hardwareMap.get(CRServo.class, "top arm");
     claw = hardwareMap.get(Servo.class, "claw");
-    clawrotate = hardwareMap.get(Servo.class, "claw rotation");
+    clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
 
 //DONT COPY
 
@@ -56,7 +58,7 @@ public class EggIncGrind extends LinearOpMode {
           open();
         }
 
-        if(this.gamepad2.a) //close claw
+        if(this.gamepad2.b) //close claw
         {
           close();
         }
@@ -70,8 +72,8 @@ public class EggIncGrind extends LinearOpMode {
   private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
     toparm.setPosition(0);
-    claw.setDirection(DcMotor.Direction.FORWARD);
-    clawrotate.setDirection(DcMotor.Direction.FORWARD);
+    claw.setPosition(0);
+    clawrotate.setPosition(0);
   }
   private void close()
   {
@@ -87,21 +89,24 @@ public class EggIncGrind extends LinearOpMode {
   }
   private void rotateArmCounterClockwise()
   {
-    clawrotate.setDirection(Servo.Direction.REVERSE);
-    clawrotate.setPower(0.5);
+    clawrotate.setPower(-0.5);
   }
-  private void moveArm(double powerarm, double fpowerarm)
+  private void moveArm(double powerarm)
   {
-    if(powerarm < 0 && (fpowerarm > -.1 && fpowerarm < 0.1))
-    {
-      bottomarm.setDirection(DcMotor.Direction.FORWARD);
-      bottomarm.setPower(powerarm * 0.5);
-    }
-    else if(powerarm > 0 && (fpowerarm > -.1 && fpowerarm < 0.1))
+    if(powerarm < 0 )
     {
       bottomarm.setDirection(DcMotor.Direction.REVERSE);
       bottomarm.setPower(powerarm * 0.5);
     }
+    else if(powerarm > 0)
+    {
+      bottomarm.setDirection(DcMotor.Direction.FORWARD);
+      bottomarm.setPower(powerarm * 0.5);
+    }
+  }
+  private void moveForearm(power)
+  {
+    
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
@@ -113,7 +118,7 @@ public class EggIncGrind extends LinearOpMode {
     lxJoyStickPosARM = -this.gamepad2.left_stick_x;
     lyJoyStickPosARM = -this.gamepad2.left_stick_y;
    
-    moveArm(ryJoyStickPosARM, rxJoyStickPosARM);
+    moveArm(ryJoyStickPosARM);
     moveForearm(lxJoyStickPosARM, lyJoyStickPosARM);
     //telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
