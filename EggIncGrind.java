@@ -75,10 +75,12 @@ public class EggIncGrind extends LinearOpMode {
   private void close()
   {
     claw.setPosition(1);
+    clawClosed = true;
   }
   private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
     claw.setPosition(0); // in theory its 0 or 1 but we have to test it.
+    clawClosed = false;
   }
   private void rotateArmClockwise()
   {
