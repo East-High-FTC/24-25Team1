@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.hardware.CRServo;
-import java.util.Map;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,80 +13,53 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   private DcMotor backright;
   private DcMotor frontleft;
   private DcMotor frontright;
-  
-  //arm
-  private DcMotor bottomarm; 
-  private CRServo toparm;
+  //arm stuff
+  private DcMotor bottomarm;
+  private DcMotor toparm;
   private Servo claw;
   private CRServo clawrotate;
-  Boolean armClosed = false;
-  
+  Boolean clawClosed = false;
 
   /**
    * This function is executed when this OpMode is selected from the Driver Station.
    */
   @Override
   public void runOpMode() {
+    //hardware initialization DONT FORGET OR ELSE REALLY LONG ERROR THAT IS ANNOYING SINCE ITS VERY AMBIGIOUS
     backleft = hardwareMap.get(DcMotor.class, "back left");
     backright = hardwareMap.get(DcMotor.class, "back right");
     frontleft = hardwareMap.get(DcMotor.class, "front left");
     frontright = hardwareMap.get(DcMotor.class, "front right");
-    //arm
-    bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
-    toparm = hardwareMap.get(CRServo.class, "toparm");
+    // arm
+    bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
+    toparm = hardwareMap.get(DcMotor.class, "top arm");
     claw = hardwareMap.get(Servo.class, "claw");
-    clawrotate = hardwareMap.get(CRServo.class, "clawrotate");
-
+    clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
     // Put initialization blocks here. aka configuring motor stuff
     initialization();
-    telemetry.addData("Status", "Initialized");
+    rmInitialization();
+    telemetry.addData("Status", "Drivebase Initialized");
+    telemetry.addData("Status", "Arm Initialized");
     telemetry.update();
     // Wait for the game to start (driver presses PLAY)
     waitForStart();
-    double lyJoyStickPos = 0;
-    double ryJoyStickPos = 0;
-    double lxJoyStickPos = 0;
-    double rxJoyStickPos = 0;
-    //arm position
-    double lyJoyStickPosARM = 0;
-    double ryJoyStickPosARM = 0;
-    double lxJoyStickPosARM = 0;
-    double rxJoyStickPosARM = 0;
+    double lyJoyStickPos = 0.0; // i forgor to add decimal (this will save 0.000001 second to compile)
+    double ryJoyStickPos = 0.0;
+    double lxJoyStickPos = 0.0;
+    double rxJoyStickPos = 0.0;
+    //arm
+    double lyJoyStickPosArm = 0.0;
+    double ryJoyStickPosArm = 0.0;
     if (opModeIsActive()) {
       while (opModeIsActive()) {
         // Put loop blocks here.
-        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
+        ryJoyStickPosARM = this.gamepad2.right_stick_y;
+        lyJoyStickPosARM = this.gamepad2.left_stick_y;
+        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos); //THIS IS MOTORS NOT ARM!!!!!!
+        setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM);
         telemetry.addData("Status", "Running");
         telemetry.update();
-        // this is arm stuff
-        setUpArmInputs(ryJoyStickPosARM, rxJoyStickPosARM, lyJoyStickPosARM, lxJoyStickPosARM);
-
-        if(ryJoyStickPosARM < 0)
-        {
-          rotateClawCounterClockwise();
-        }
-        else if (ryJoyStickPosARM > 0)
-        {
-          rotateClawClockwise();
-        }
-        /*if(this.gamepad2.a && armClosed == true) //open claw
-        {
-          open();
-          sleep(500);
-        }
-        else if (this.gamepad2.a && armClosed == false) // this makes the a button toggleable
-        {
-          close();
-          sleep(500);
-        }*/
-        if(this.gamepad2.a)
-        {
-          open();
-        }
-        else if(this.gamepad2.b)
-        {
-          close();
-        }
+        //player 1 inputs (driver)
         if(this.gamepad1.b)
         {
           telemetry.addData("Status:", "Broken!");
@@ -99,6 +69,39 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         if(this.gamepad1.x)
         {
           hitBreaks(); // is this break or the brake button?!?!?!?!?
+        }
+        if(this.gamepad1.right_trigger)
+        {
+          motorSpeed = 0.5; // change
+        }
+        else
+        {
+          motorSpeed = 1.0; //change
+        }
+        //player 2 inputs (arm guy)
+        if (gamepad2.right_bumper) // evan your right bumpers actually make sense (i too can admit when im wrong)
+        { 
+            rotateArmClockwise();
+        } 
+        else if (gamepad2.left_bumper)
+        {
+            rotateArmCounterClockwise();
+        }
+        else 
+        {
+            clawrotate.setPower(0); // Stop claw rotation
+        }
+        if(this.gamepad2.a) // this makes it toggle able
+        {
+            clawClosed = !clawClosed; // better debounce
+            if(clawClosed)
+            {
+                close();
+            }
+            else
+            {
+                open();
+            }
         }
       // Put run blocks here.
       }
@@ -113,15 +116,15 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     backleft.setDirection(DcMotor.Direction.FORWARD);
   }
 
-   //Forward & backwards movement
+  //Forward & backwards movement
   private void forwardBackward(double power, double dpower) {
     initialization();
     if(dpower == 0)
     {
-      backleft.setPower(-power);
-      backright.setPower(-power);
-      frontleft.setPower(-power);
-      frontright.setPower(-power);
+      backleft.setPower(power);
+      backright.setPower(power);
+      frontleft.setPower(power);
+      frontright.setPower(power);
      
       telemetry.addData("Motor Power", frontleft.getPower());
       telemetry.addData("Motor Power", frontright.getPower());
@@ -131,7 +134,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   }
   private void rightLeft(double power, double fpower)
   {
-    if(power > 0 && (fpower > -.1 && fpower < 0.1))//left
+    if(power < 0 && (fpower > -.2 && fpower < 0.2))//left
     {    
       //reset directions
       initialization();
@@ -143,7 +146,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontleft.setPower(power);
       frontright.setPower(power);
     }
-    else if (power < 0 && (fpower > -.1 && fpower < 0.1))//right
+    else if (power > 0 && (fpower > -.2 && fpower < 0.2))//right
     {
       //reset directions
       initialization();
@@ -155,9 +158,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontright.setPower(power);
     }
   }
-   private void diagonalLeft(double power, double fpower)
+  //stuff evan made
+  private void diagonalLeft(double power, double lpower)
   {
-      if(power < 0 && (fpower > .2)) //diagonal left down
+      if(power < 0 && (lpower > .2)) //diagonal left down
     {    
       //reset directions
       initialization();
@@ -165,37 +169,49 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       backright.setDirection(DcMotor.Direction.FORWARD);
      
       backleft.setPower(0);
-      backright.setPower(power);
-      frontleft.setPower(power);
+      backright.setPower(power + lpower);
+      frontleft.setPower(power + lpower);
       frontright.setPower(0);
     }
-    else if (power < 0 && (fpower < -.2))//left up
+    else if (power < 0 && (lpower < -.2))//left up
     {
       //reset directions
       initialization();
       frontright.setDirection(DcMotor.Direction.FORWARD);
       backleft.setDirection(DcMotor.Direction.REVERSE);
-      backleft.setPower(power);
+      backleft.setPower(power + lpower);
       backright.setPower(0);
       frontleft.setPower(0);
-      frontright.setPower(power);
+      frontright.setPower(power + lpower);
     }
   }
-  private void diagonalRight(double power, double fpower)
+  private void diagonalRight(double power, double lpower)
   {
-      if(power > 0 && (fpower > .2)) //diagonal right down
+      if(power > 0 && (lpower > .2)) //diagonal right down
     {    
       //reset directions
       initialization();
       frontright.setDirection(DcMotor.Direction.REVERSE);
       backleft.setDirection(DcMotor.Direction.FORWARD);
      
-      backleft.setPower(power);
+      backleft.setPower(power + lpower);
       backright.setPower(0);
       frontleft.setPower(0);
-      frontright.setPower(power);
+      frontright.setPower(power + lpower);
+    }
+    else if (power > 0 && (lpower < -.2))//right up
+    {
+      //reset directions
+      initialization();
+      frontleft.setDirection(DcMotor.Direction.FORWARD);
+      backright.setDirection(DcMotor.Direction.REVERSE);
+      backleft.setPower(0);
+      backright.setPower(power + lpower);
+      frontleft.setPower(power + lpower);
+      frontright.setPower(0);
     }
   }
+  //evan didnt write this
   private void bb()
   {
     double power = 0;
@@ -248,7 +264,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
    
     forwardBackward(ryJoyStickPos, rxJoyStickPos);
     rightLeft(rxJoyStickPos, ryJoyStickPos);
-       diagonalRight(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
+    diagonalRight(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
     diagonalLeft(rxJoyStickPos, ryJoyStickPos); //this is probably wrong
     rotate(lxJoyStickPos, lyJoyStickPos);
     telemetry.addData("Go Power:", ryJoyStickPos);
@@ -260,77 +276,104 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     telemetry.addData("Status","Emergency Breaks Activated!");
     telemetry.update();
     backleft.setPower(0);
-    backleft.setPower(0);
-    backleft.setPower(0);
-    backleft.setPower(0);
+    backright.setPower(0);
+    frontleft.setPower(0);
+    frontright.setPower(0);
   }
-  // arm functions
-    private void armInitialization() {
+  //ARM FUNCTIONS
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  //setup motors dont forget to add the armInitialization() earlier
+ private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
-    toparm.setPower(0);
+    toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setPosition(0);
-    clawrotate.setPower(0);
+    clawrotate.setPosition(0);
   }
   private void close()
   {
-    claw.setPosition(0.d);
-    telemetry.addData("Claw Status: ", claw.getPosition());
-    telemetry.update();
-    armClosed = true;
+    claw.setPosition(1);
   }
   private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
-    claw.setPosition(1.d); // in theory its 0 or 1 but we have to test it.
-    telemetry.addData("Claw Status: ", claw.getPosition());
-    telemetry.update();
-    armClosed = false;
+    claw.setPosition(0); // in theory its 0 or 1 but we have to test it.
   }
-  private void rotateClawClockwise()
+  private void rotateArmClockwise()
   {
-    clawrotate.setPower(1.d);
+    clawrotate.setPower(0.5);
   }
-  private void rotateClawCounterClockwise()
+  private void rotateArmCounterClockwise()
   {
-    clawrotate.setPower(-1.d);
+    clawrotate.setPower(-0.5);
   }
   private void moveArm(double powerarm)
   {
-    if(powerarm > 0)
+    if(powerarm < 0 )
     {
-      bottomarm.setDirection(DcMotor.Direction.REVERSE); // reverse is is forward since mootor is backwards
-      bottomarm.setPower(powerarm *0.4);
+      bottomarm.setDirection(DcMotor.Direction.REVERSE);
+      bottomarm.setPower(powerarm * 0.5);
     }
-    else if(powerarm < 0)
+    else if(powerarm > 0)
     {
-      bottomarm.setDirection(DcMotor.Direction.FORWARD); // forward is reverse since motor is backwards
-      bottomarm.setPower(-powerarm *0.4);
+      bottomarm.setDirection(DcMotor.Direction.FORWARD);
+      bottomarm.setPower(powerarm * 0.5);
     }
   }
-    private void moveTopArm(double powerarm)
+  private void moveForearm(double power)
   {
-    if(powerarm > 0) // raises arm
-    {
-      toparm.setPower(powerarm * 2);
-    }
-    else if(powerarm < 0) // lowers arm
-    {
-      toparm.setPower(powerarm * 2);
-    }
+    toparm.setPower(power *.5);
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
-  private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
-  double lyJoyStickPosARM, double lxJoyStickPosARM)
-{
-    ryJoyStickPosARM = this.gamepad2.right_stick_y;
-    rxJoyStickPosARM = -this.gamepad2.right_stick_x;
-    lxJoyStickPosARM = -this.gamepad2.left_stick_x;
-    lyJoyStickPosARM = this.gamepad2.left_stick_y;
-   
+  private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM)
+  {  
     moveArm(ryJoyStickPosARM);
-    moveTopArm(lyJoyStickPosARM);
-    //telemetry.addData("Go Power:", ryJoyStickPos);
-    //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
+    moveForearm(lyJoyStickPosARM);
+    telemetry.addData("Bottom Arm Power:", ryJoyStickPos);
+    telemetry.addData("Top Arm Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
   }
 }
+
+/*
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠄⠒⠒⠀⠀⠒⠂⠠⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠂⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠀⠀⣐⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⠀⠡⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⠀⠀⠈⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀⠐⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⢀⠄⠂⠠⢀⡀⠀⠀⠀⠀⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠨⡄⠀⠀⠀⠀⢀⠠⠐⠒⠐⠄
+⢠⠁⠀⠀⠀⠀⠀⠈⠉⠉⠉⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣿⣿⣿⣿⣶⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡤⡀⠁⠉⠀⠀⠀⠀⠀⠈
+⢸⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠰⠀⠀⠀⠀⠀⠀⠀⢨
+⠘⠄⠤⠀⠀⠀⠀⠀⠀⡆⠀⠀⢀⣼⣿⣿⠿⠿⠛⠻⠛⠛⠛⠙⠛⠛⠋⠩⠝⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⢘⣿⡶⣶⠲⢶⣴⣦⡄⠁
+⠀⠀⠇⠀⠀⠀⠠⠔⢈⠁⠁⠀⣾⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢃⡹⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⣿⣝⡾⣑⢎⡷⣏⡇⠀
+⠀⠀⠏⠛⠓⠻⠷⠿⢿⠀⠀⠀⣿⣿⠇⠀⠀⠀⠀⣀⣠⣄⣤⣄⣀⣀⣀⠀⠸⣽⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⣽⡾⣝⣳⢎⡿⡥⠂⠀
+⠀⠀⢰⠀⠀⠀⠀⠀⢘⠀⠀⠀⢿⣿⢰⣤⣴⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⣿⡽⣯⡽⢾⣹⡓⠀⠀
+⠀⠀⢸⠀⠀⠀⠀⠀⠨⠀⡀⢠⡘⣿⠸⣿⣿⡟⣋⢿⣿⡿⠙⣿⣿⡿⣽⢻⣿⡿⢽⣷⡇⠀⠀⠀⠀⠀⠀⢠⣿⣟⣷⡻⣝⣧⢹⠀⠀
+⠀⠀⠘⡀⠀⠀⠀⠀⠀⡄⠙⠀⣿⣿⠀⠈⠛⠂⠡⠾⠟⠁⠀⡨⠟⠓⣖⣋⡁⣤⣿⢿⡇⠀⠀⠀⠀⠀⠀⢸⣿⣞⣷⡻⣽⡺⡥⠀⠀
+⠀⠀⠀⡄⠀⠀⠀⠀⠀⡇⠀⠀⢹⣯⡦⣤⣦⣤⡄⣃⠀⠀⠀⢴⣛⣶⢏⣾⣿⣿⣿⣻⠁⠀⠀⠀⠀⠀⠀⣸⣿⢾⣳⣟⡷⡽⡁⠀⠀
+⠀⠀⠀⠇⠀⠀⠀⠀⠀⢡⢸⣡⡍⢳⣿⣳⣭⡷⡤⠝⣤⣁⣀⣺⣿⢻⢾⣭⣿⣿⡿⠃⠀⠀⠀⠰⣭⣱⢀⣿⣿⣻⡽⣾⣝⣷⠁⠀⠀
+⠀⠀⠀⢰⠀⠀⢀⢀⠀⢈⡆⠁⠀⠀⠸⣷⣻⢿⣿⣶⣼⣿⣿⣿⣯⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠉⠀⣼⣿⡷⣿⣽⣳⢯⠸⠀⠀⠀
+⠀⠀⠀⠈⡄⠀⠀⢢⠳⡠⢼⠀⠀⠀⠀⢿⣶⣂⢿⣿⣏⢙⠈⠙⢻⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣽⡷⣯⣟⠯⡆⠀⠀⠀
+⠀⠀⠀⠀⠰⠀⠀⠀⡑⢝⢦⣇⠀⠀⠀⠘⣿⣿⣦⡹⢿⣶⣶⣶⢿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⢠⣿⣿⣟⣾⣿⣻⣞⢷⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠇⠀⠶⡈⡎⣷⡾⣷⡀⠀⠀⣿⣿⣿⣿⣆⠈⣀⣈⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⡿⣷⣿⡎⡆⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⠈⠮⠵⠵⠎⠵⠛⠛⠛⠛⠻⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠷⠶⠶⠶⠾⠿⠿⠿⠿⠿⠿⠽⣿⣟⢗⠜⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⢀⠀⣀⣀⣀⣀⡈⠎⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠈⠀⠀⠉⠉⠉⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠂⠐⠀⠈⠀⠉⠉⠉⠉⠀⠀⠀⠀⠐⢰⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⢄⡰⢠⢒⡰⢂⡖⣐⠺⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠠⢄⢢⡱⣘⢦⡜⣣⢮⡵⣫⡼⣧⢹⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢱⡰⢶⡖⣦⢤⣤⣤⣤⣤⣄⣀⣀⣀⣀⣀⣀⣀⣄⣤⣔⣦⣳⢦⣟⣮⣷⣻⣽⣞⣿⡽⣯⣿⣟⣿⠫⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢇⠢⡙⢤⠛⣼⢳⣻⢮⣝⡯⣽⣹⢮⡽⣭⣛⢮⣗⡻⣞⡽⣯⣻⠷⣯⢷⣻⢾⣽⣛⣷⣻⣞⢧⠁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⡵⣹⢦⣛⢦⣏⣷⣻⢮⡽⣶⣛⣮⢗⡷⣫⣟⡼⣝⣧⠿⣵⢯⡿⣭⢿⣭⣟⡾⣽⡞⣷⢏⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠸⣟⣯⣟⡿⣞⡷⣯⢿⡽⣞⣳⣭⢿⣹⣗⡾⣝⡾⣞⣻⡽⣾⡽⢯⣷⣛⡾⣽⣳⢿⢙⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠪⠿⣽⣯⢿⡽⣯⢿⣽⣳⢯⣟⡷⡾⣝⣻⡼⣯⢷⣻⣗⣿⣻⢾⣽⣻⠷⡫⠂⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠩⢟⢿⣽⣟⣾⣽⣟⣾⣽⡿⣽⣷⣻⣽⣯⣷⣻⣾⡽⡛⠎⠃⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠉⠉⠉⠙⠛⠛⡙⢩⠩⣅⠫⢖⡭⣿⢺⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠣⡐⢍⠎⡼⣻⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠄⠱⡈⢎⡱⣝⣏⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠠⢑⠢⣑⢮⢿⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠡⠌⡒⡡⢞⣯⢯⠱⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⢢⠁⢧⡙⣮⣟⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢂⠍⢦⡙⣮⢿⡈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡌⡘⢦⣙⣾⣋⠁⠀  ,⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+(im so sorry)
+ */
