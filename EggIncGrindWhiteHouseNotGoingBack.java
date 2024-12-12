@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.DcMotor;
 
 @Autonomous(name="Autonomous Blue") // THIS IS FOR WHEN WE ARE BLUE TEAM!! VERY IMPORTANT IF YOU DIDN'T READ THIS THEN YOU WOULD THINK THIS IS RED TEAM OR SOMETHING THEN NWE WOULD LOSE AND THAT IS VERY BAD
-public class EggIncGrindHouse extends LinearOpMode {
+public class EggIncGrindWhiteHouseNotGoingBack extends LinearOpMode {
 
     // adding motors for driving
     private DcMotor backleft; 
