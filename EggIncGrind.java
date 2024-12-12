@@ -113,7 +113,7 @@ public class EggIncGrind extends LinearOpMode {
     ryJoyStickPosARM = this.gamepad2.right_stick_y;
     rxJoyStickPosARM = -this.gamepad2.right_stick_x;
     lxJoyStickPosARM = -this.gamepad2.left_stick_x;
-    lyJoyStickPosARM = -this.gamepad2.left_stick_y;
+    lyJoyStickPosARM = this.gamepad2.left_stick_y;
    
     moveArm(ryJoyStickPosARM);
     moveForearm(lyJoyStickPosARM);
