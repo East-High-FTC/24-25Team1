@@ -26,8 +26,6 @@ public class EggIncGrind extends LinearOpMode {
     claw = hardwareMap.get(Servo.class, "claw");
     clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
 
-//DONT COPY
-
     // Put initialization blocks here. aka configuring motor stuff
     armInitialization();
     telemetry.addData("Status", "Servors Initialized");
@@ -40,24 +38,34 @@ public class EggIncGrind extends LinearOpMode {
     double rxJoyStickPosArm = 0;
     if (opModeIsActive()) {
       while (opModeIsActive()) {
-        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos);
-        setUpArmInputs(ryJoyStickPosARM, rxJoyStickPosARM, lyJoyStickPosARM, lxJoyStickPosARM);
+        ryJoyStickPosARM = this.gamepad2.right_stick_y;
+        lyJoyStickPosARM = this.gamepad2.left_stick_y;
+        setUpInputs(ryJoyStickPos, rxJoyStickPos, lyJoyStickPos, lxJoyStickPos); // THIS IS MOTOR I FORGOR I DELETED THIS DON'T DO THAT THAT BREAKS THE DRIVE HUB AND WAS PEROBABLY THE REASON IT STARTED DRIVING BY ITS SELF THAT ONE TIME!!!!!!!!!!!!
+        setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM);
 
-        if(ryJoyStickPosArm > 0)
+        if (gamepad2.right_bumper) // evan your right bumpers actually make sense (i now can admit when i was wrong)
+        { 
+            rotateArmClockwise();
+        } 
+        else if (gamepad2.left_bumper)
         {
-          rotateClawCounterClockwise();
+            rotateArmCounterClockwise();
         }
-        else if (ryJoyStickPosArm < 0)
+        else 
         {
-          rotateClawClockwise();
+            clawrotate.setPower(0); // Stop claw rotation
         }
-        if(this.gamepad2.a && clawClosed == false) //open claw
+        if(this.gamepad2.a) // this makes it toggle able
         {
-          open();
-        }
-        else if(this.gamepad2.a && clawClosed == true)
-        {
-          close();
+            clawClosed = !clawClosed; // better debounce
+            if(clawClosed)
+            {
+                close();
+            }
+            else
+            {
+                open();
+            }
         }
     }
   }
@@ -66,7 +74,7 @@ public class EggIncGrind extends LinearOpMode {
 //use this after runopmode
 
 //setup motors dont forget to add the armInitialization() earlier
-  private void armInitialization() {
+ private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
     toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setPosition(0);
@@ -75,12 +83,10 @@ public class EggIncGrind extends LinearOpMode {
   private void close()
   {
     claw.setPosition(1);
-    clawClosed = true;
   }
   private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
     claw.setPosition(0); // in theory its 0 or 1 but we have to test it.
-    clawClosed = false;
   }
   private void rotateArmClockwise()
   {
@@ -109,18 +115,12 @@ public class EggIncGrind extends LinearOpMode {
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
-  private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
-  double lyJoyStickPosARM, double lxJoyStickPosARM)
-{
-    ryJoyStickPosARM = this.gamepad2.right_stick_y;
-    rxJoyStickPosARM = -this.gamepad2.right_stick_x;
-    lxJoyStickPosARM = -this.gamepad2.left_stick_x;
-    lyJoyStickPosARM = this.gamepad2.left_stick_y;
-   
+  private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM)
+{  
     moveArm(ryJoyStickPosARM);
     moveForearm(lyJoyStickPosARM);
-    //telemetry.addData("Go Power:", ryJoyStickPos);
-    //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
+    telemetry.addData("Bottom Arm Power:", ryJoyStickPos);
+    telemetry.addData("Top Arm Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
   }
 }
