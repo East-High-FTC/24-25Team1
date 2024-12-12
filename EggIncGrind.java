@@ -14,16 +14,15 @@ import com.qualcomm.robotcore.hardware.CRServo;
 @TeleOp(name = "EggIncGrind (Blocks to Java)")
 public class EggIncGrind extends LinearOpMode {
   private DcMotor bottomarm;
-  private CRServo toparm;
+  private DcMotor toparm;
   private Servo claw;
   private CRServo clawrotate;
-
+  Boolean clawClosed = false;
   @Override
   public void runOpMode() {
-
-
+    
     bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
-    toparm = hardwareMap.get(CRServo.class, "top arm");
+    toparm = hardwareMap.get(DcMotor.class, "top arm");
     claw = hardwareMap.get(Servo.class, "claw");
     clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
 
@@ -52,13 +51,11 @@ public class EggIncGrind extends LinearOpMode {
         {
           rotateClawClockwise();
         }
-      
-        if(this.gamepad2.a) //open claw
+        if(this.gamepad2.a && clawClosed == false) //open claw
         {
           open();
         }
-
-        if(this.gamepad2.b) //close claw
+        else if(this.gamepad2.a && clawClosed == true)
         {
           close();
         }
@@ -71,7 +68,7 @@ public class EggIncGrind extends LinearOpMode {
 //setup motors dont forget to add the armInitialization() earlier
   private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
-    toparm.setPosition(0);
+    toparm.setDirection(DcMotor.Direction.FORWARD);
     claw.setPosition(0);
     clawrotate.setPosition(0);
   }
@@ -106,7 +103,7 @@ public class EggIncGrind extends LinearOpMode {
   }
   private void moveForearm(power)
   {
-    
+    toparm.setPower(power *.5);
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
@@ -119,7 +116,7 @@ public class EggIncGrind extends LinearOpMode {
     lyJoyStickPosARM = -this.gamepad2.left_stick_y;
    
     moveArm(ryJoyStickPosARM);
-    moveForearm(lxJoyStickPosARM, lyJoyStickPosARM);
+    moveForearm(lyJoyStickPosARM);
     //telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
