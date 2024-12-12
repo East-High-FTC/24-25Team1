@@ -198,7 +198,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     while(true)
     {
       telemetry.addData("need some help now!!!", power);
-     
+      telemetry.update();
     }
   }
   private void rotate(double xpower, double ypower)
@@ -263,21 +263,21 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     claw.setPosition(0);
     clawrotate.setPower(0);
   }
-  private void close()
+  private void close() //claw
   {
     armClosed = true;
     claw.setPosition(1.d);
     telemetry.addData("Claw Status: ", claw.getPosition());
     telemetry.update();
   }
-  private void open() // this servo is 180 degrees so its positions shall be 0-1
+  private void open() // this servo is 180 degrees so its positions shall be 0-1 claw
   {
     armClosed = false;
     claw.setPosition(0.d); // in theory its 0 or 1 but we have to test it.
     telemetry.addData("Claw Status: ", claw.getPosition());
     telemetry.update();
   }
-  private void rotateClawClockwise()
+  private void rotateClawClockwise() // kreepy klaw thing
   {
     clawrotate.setPower(1.d);
   }
@@ -289,19 +289,34 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   {
     if(powerarm > 0)
     {
-      bottomarm.setDirection(DcMotor.Direction.REVERSE);
+      bottomarm.setDirection(DcMotor.Direction.REVERSE); // reverse is is forward since mootor is backwards
       bottomarm.setPower(powerarm);
     }
     else if(powerarm < 0)
     {
-      bottomarm.setDirection(DcMotor.Direction.FORWARD);
-      bottomarm.setPower(-1);
+      bottomarm.setDirection(DcMotor.Direction.FORWARD); // forward is reverse since motor is backwards
+      bottomarm.setPower(1);
+    }
+  }
+  private void moveTopArm(double powerarm)
+  {
+    if(powerarm > 0) // raises arm
+    {
+      toparm.setPosition(1);
+      telemetry.addData("Top Arm:", "up");
+      telemetry.update();
+    }
+    else if(powerarm < 0) // lowers arm
+    {
+      toparm.setPosition(0);
+      telemetry.addData("Top Arm:", "down");
+      telemetry.update();
     }
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
   private void setUpArmInputs(double ryJoyStickPosARM, double rxJoyStickPosARM,
-  double lyJoyStickPosARM, double lxJoyStickPosARM)
+                              double lyJoyStickPosARM, double lxJoyStickPosARM)
 {
     ryJoyStickPosARM = this.gamepad2.right_stick_y;
     rxJoyStickPosARM = -this.gamepad2.right_stick_x;
@@ -309,7 +324,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     lyJoyStickPosARM = -this.gamepad2.left_stick_y;
    
     moveArm(ryJoyStickPosARM);
-    //moveForearm(lxJoyStickPosARM, lyJoyStickPosARM);
+    moveTopArm(lyJoyStickPosARM); // let us hope this works!
     //telemetry.addData("Go Power:", ryJoyStickPos);
     //telemetry.addData("Rotate Power:", lxJoyStickPos); //theoretikal telemaetry
     telemetry.update();
