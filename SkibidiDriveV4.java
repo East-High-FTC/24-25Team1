@@ -64,15 +64,15 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         // this is arm stuff
         setUpArmInputs(ryJoyStickPosARM, rxJoyStickPosARM, lyJoyStickPosARM, lxJoyStickPosARM);
 
-        if(ryJoyStickPosARM > 0)
+        if(ryJoyStickPosARM < 0)
         {
           rotateClawCounterClockwise();
         }
-        else if (ryJoyStickPosARM < 0)
+        else if (ryJoyStickPosARM > 0)
         {
           rotateClawClockwise();
         }
-        if(this.gamepad2.a && armClosed == true) //open claw
+        /*if(this.gamepad2.a && armClosed == true) //open claw
         {
           open();
           sleep(500);
@@ -81,6 +81,14 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
           close();
           sleep(500);
+        }*/
+        if(this.gamepad2.a)
+        {
+          open();
+        }
+        else if(this.gamepad2.b)
+        {
+          close();
         }
         if(this.gamepad1.b)
         {
@@ -265,17 +273,17 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   }
   private void close()
   {
-    armClosed = true;
-    claw.setPosition(1.d);
+    claw.setPosition(0.d);
     telemetry.addData("Claw Status: ", claw.getPosition());
     telemetry.update();
+    armClosed = true;
   }
   private void open() // this servo is 180 degrees so its positions shall be 0-1
   {
-    armClosed = false;
-    claw.setPosition(0.d); // in theory its 0 or 1 but we have to test it.
+    claw.setPosition(1.d); // in theory its 0 or 1 but we have to test it.
     telemetry.addData("Claw Status: ", claw.getPosition());
     telemetry.update();
+    armClosed = false;
   }
   private void rotateClawClockwise()
   {
@@ -289,13 +297,13 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   {
     if(powerarm > 0)
     {
-      bottomarm.setDirection(DcMotor.Direction.REVERSE);
-      bottomarm.setPower(powerarm);
+      bottomarm.setDirection(DcMotor.Direction.REVERSE); // reverse is is forward since mootor is backwards
+      bottomarm.setPower(powerarm *0.4);
     }
     else if(powerarm < 0)
     {
-      bottomarm.setDirection(DcMotor.Direction.FORWARD);
-      bottomarm.setPower(-1);
+      bottomarm.setDirection(DcMotor.Direction.FORWARD); // forward is reverse since motor is backwards
+      bottomarm.setPower(-powerarm *0.4);
     }
   }
     private void moveTopArm(double powerarm)
@@ -317,7 +325,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     ryJoyStickPosARM = this.gamepad2.right_stick_y;
     rxJoyStickPosARM = -this.gamepad2.right_stick_x;
     lxJoyStickPosARM = -this.gamepad2.left_stick_x;
-    lyJoyStickPosARM = -this.gamepad2.left_stick_y;
+    lyJoyStickPosARM = this.gamepad2.left_stick_y;
    
     moveArm(ryJoyStickPosARM);
     moveTopArm(lyJoyStickPosARM);
