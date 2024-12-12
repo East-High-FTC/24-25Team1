@@ -72,14 +72,14 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
           rotateClawClockwise();
         }
-        if(this.gamepad2.a && armClosed == true) //open claw
-        {
-          open();
-          sleep(500);
-        }
-        else if (this.gamepad2.a && armClosed == false) // this makes the a button toggleable
+        if(this.gamepad2.a && armClosed == false ) //close claw
         {
           close();
+          sleep(500);
+        }
+        else if (this.gamepad2.a && armClosed == true) // this makes the a button toggleable
+        {
+          open();
           sleep(500);
         }
         if(this.gamepad1.b)
@@ -290,27 +290,23 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     if(powerarm > 0)
     {
       bottomarm.setDirection(DcMotor.Direction.REVERSE); // reverse is is forward since mootor is backwards
-      bottomarm.setPower(powerarm);
+      bottomarm.setPower(powerarm *0.1);
     }
     else if(powerarm < 0)
     {
       bottomarm.setDirection(DcMotor.Direction.FORWARD); // forward is reverse since motor is backwards
-      bottomarm.setPower(1);
+      bottomarm.setPower(powerarm *0.1);
     }
   }
   private void moveTopArm(double powerarm)
   {
     if(powerarm > 0) // raises arm
     {
-      toparm.setPosition(1);
-      telemetry.addData("Top Arm:", "up");
-      telemetry.update();
+      toparm.setPosition();
     }
     else if(powerarm < 0) // lowers arm
     {
-      toparm.setPosition(0);
-      telemetry.addData("Top Arm:", "down");
-      telemetry.update();
+      toparm.setPosition(powerarm);
     }
   }
   //make up and down on the left stick move the top half of the arm 
