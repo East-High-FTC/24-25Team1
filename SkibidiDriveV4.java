@@ -1,4 +1,3 @@
-//final verison
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -99,10 +98,12 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             if(clawClosed)
             {
                 close();
+                sleep(500);
             }
             else
             {
                 open();
+                sleep(500);
             }
         }
       // Put run blocks here.
@@ -309,7 +310,9 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   }
   private void moveArm(double powerarm)
   {
-    if(powerarm < 0 )
+    bottomarm.setDirection(DcMotor.Direction.REVERSE);
+    bottomarm.setPower(powerarm *0.75);
+    /*if(powerarm < 0 )
     {
       bottomarm.setDirection(DcMotor.Direction.REVERSE);
       bottomarm.setPower(powerarm * 0.5);
@@ -318,11 +321,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     {
       bottomarm.setDirection(DcMotor.Direction.FORWARD);
       bottomarm.setPower(powerarm * 0.5);
-    }
+    }*/
   }
   private void moveForearm(double power)
   {
-    toparm.setPower(power *.5);
+    toparm.setPower(power *.4);
   }
   //make up and down on the left stick move the top half of the arm 
   //make up and down on the right stick move the bottom half of the arm 
