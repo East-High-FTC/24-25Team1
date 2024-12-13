@@ -37,7 +37,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
     // Put initialization blocks here. aka configuring motor stuff
     initialization();
-    rmInitialization();
+    armInitialization();
     telemetry.addData("Status", "Drivebase Initialized");
     telemetry.addData("Status", "Arm Initialized");
     telemetry.update();
@@ -161,7 +161,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   //stuff evan made
   private void diagonalLeft(double power, double lpower)
   {
-      if(power < 0 && (lpower > .2)) //diagonal left down
+      if(power < -.2 && (lpower > .2)) //diagonal left down
     {    
       //reset directions
       initialization();
@@ -173,7 +173,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontleft.setPower(power + lpower);
       frontright.setPower(0);
     }
-    else if (power < 0 && (lpower < -.2))//left up
+    else if (power < -.2 && (lpower < -.2))//left up
     {
       //reset directions
       initialization();
@@ -187,7 +187,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
   }
   private void diagonalRight(double power, double lpower)
   {
-      if(power > 0 && (lpower > .2)) //diagonal right down
+      if(power > .2 && (lpower > .2)) //diagonal right down
     {    
       //reset directions
       initialization();
@@ -199,7 +199,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
       frontleft.setPower(0);
       frontright.setPower(power + lpower);
     }
-    else if (power > 0 && (lpower < -.2))//right up
+    else if (power > .2 && (lpower < -.2))//right up
     {
       //reset directions
       initialization();
