@@ -32,10 +32,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     frontleft = hardwareMap.get(DcMotor.class, "front left");
     frontright = hardwareMap.get(DcMotor.class, "front right");
     // arm
-    bottomarm = hardwareMap.get(DcMotor.class, "bottom arm");
-    toparm = hardwareMap.get(DcMotor.class, "top arm");
+    bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
+    toparm = hardwareMap.get(DcMotor.class, "toparm");
     claw = hardwareMap.get(Servo.class, "claw");
-    clawrotate = hardwareMap.get(CRServo.class, "claw rotation");
+    clawrotate = hardwareMap.get(CRServo.class, "clawrotation");
     // Put initialization blocks here. aka configuring motor stuff
     initialization();
     armInitialization();
