@@ -289,7 +289,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
  private void armInitialization() {
     bottomarm.setDirection(DcMotor.Direction.FORWARD);
     toparm.setDirection(DcMotor.Direction.FORWARD);
-    claw.setPosition(0);
+    claw.setPosition(1);
     clawrotate.setPower(0);
   }
   private void close()
