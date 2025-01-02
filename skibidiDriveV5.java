@@ -89,11 +89,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 {
                     rotateArmClockwise();
                 }
-                else if (gamepad2.left_bumper)
+                if (gamepad2.left_bumper)
                 {
                     rotateArmCounterClockwise();
                 }
-                else
+                if(!gamepad2.left_bumper && !gamepad2.right_bumper)
                 {
                     clawrotate.setPower(0); // Stop claw rotation
                 }
@@ -114,7 +114,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             }
        // }
     }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // setting up motors
     private void initialization() {
         frontleft.setDirection(DcMotor.Direction.FORWARD);
