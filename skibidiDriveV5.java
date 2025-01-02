@@ -5,20 +5,22 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "SkibidiDriveBuiltBackBetter (Blocks to Java)")
 public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
 
-    private DcMotor backleft;
-    private DcMotor backright;
-    private DcMotor frontleft;
-    private DcMotor frontright;
+    private DcMotor backleft = null;
+    private DcMotor backright = null;
+    private DcMotor frontleft = null;
+    private DcMotor frontright = null;
     //arm stuff
-    private DcMotor bottomarm;
-    private DcMotor toparm;
-    private Servo claw;
-    private CRServo clawrotate;
+    private DcMotor bottomarm = null;
+    private DcMotor toparm = null;
+    private Servo claw = null;
+    private CRServo clawrotate = null;
     Boolean clawClosed = false;
+    private ElapsedTime runtime = new ElapsedTime();
 
     /**
      * This function is executed when this OpMode is selected from the Driver Station.
@@ -47,18 +49,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        // DO NOT UNCOMMENT THE THREAD SINCE THREADING IS LAST CASE SCENARIO
-/*        Thread armThread = new Thread(() -> { //don't create drivebase thread since its using the Main thread
-            try{
-                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM);
-            } catch(InterruptedException exception){
-                Thread.currentThread().interrupt();
-            }
-        });
-        armThread.start();
-        armThread.join(); */ //connects the thread
-        if (opModeIsActive()) {
+        runtime.reset(); // heard thiss is good
+       // if (opModeIsActive()) {
             while (opModeIsActive()) {
+                telemetry.addData("Status","Run Time: " + runtime.toString());
                 // Put loop blocks here.
                 //player 1 controller variables
                 double ryJoyStickPos = this.gamepad1.right_stick_y;
@@ -114,7 +108,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 }
                 // Put run blocks here.
             }
-        }
+       // }
     }
 
     // setting up motors
@@ -291,7 +285,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         bottomarm.setDirection(DcMotor.Direction.FORWARD);
         toparm.setDirection(DcMotor.Direction.FORWARD);
         claw.setPosition(1);
-        clawrotate.setPower(0);
+        //clawrotate.setPower(0);
     }
     private void close()
     {
