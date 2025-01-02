@@ -33,10 +33,15 @@ public class EggIncGrindHouse extends LinearOpMode {
         initialization();
 
         waitForStart();
-
+        
+        forward(1000);
+        backward(500);
+        right(500);
+        left(1000);
+        
 
     }    
-    private void forward()
+    private void forward(double time)
     {
         backleft.setPower(0);
         backright.setPower(0);
@@ -51,8 +56,9 @@ public class EggIncGrindHouse extends LinearOpMode {
         backright.setPower(0.5);
         frontleft.setPower(0.5);
         frontright.setPower(0.5);
+        sleep(time);
     }    
-    private void backward()
+    private void backward(double time)
     {
         backleft.setPower(0);
         backright.setPower(0);
@@ -67,8 +73,9 @@ public class EggIncGrindHouse extends LinearOpMode {
         backright.setPower(0.5);
         frontleft.setPower(0.5);
         frontright.setPower(0.5);
+        sleep(time);
     }
-    private void right()
+    private void right(double time)
     {
         backleft.setPower(0);
         backright.setPower(0);
@@ -83,8 +90,9 @@ public class EggIncGrindHouse extends LinearOpMode {
         backright.setPower(0.5);
         frontleft.setPower(0.5);
         frontright.setPower(0.5);
+        sleep(time);
     }
-    private void left()
+    private void left(double time)
     {
         backleft.setPower(0);
         backright.setPower(0);
@@ -99,6 +107,7 @@ public class EggIncGrindHouse extends LinearOpMode {
         backright.setPower(0.5);
         frontleft.setPower(0.5);
         frontright.setPower(0.5);
+        sleep(time);
     }
     private void initialization() 
     {
