@@ -1,3 +1,7 @@
+/*
+SUPER HELPFUL LINK ON ENCODERS!
+https://gm0.org/en/latest/docs/software/tutorials/encoders.html
+*/
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
