@@ -34,11 +34,16 @@ public class EggIncGrindHouse extends LinearOpMode {
 
         waitForStart();
         
+        backward(1000);
+        left(500);
         forward(1000);
-        backward(500);
-        right(500);
-        left(1000);
-        
+        backward(1000);
+        left(500);
+        forward(1000);
+        backward(1000);
+        left(500);
+        forward(1000);
+        backward(1000);
 
     }    
     private void forward(double time)
