@@ -114,6 +114,40 @@ public class EggIncGrindHouse extends LinearOpMode {
         frontright.setPower(0.5);
         sleep(time);
     }
+    private void rotateclockwise(double time)
+    {
+        backleft.setPower(0);
+        backright.setPower(0);
+        frontleft.setPower(0);
+        frontright.setPower(0);
+        frontleft.setDirection(DcMotor.Direction.FORWARD);
+        frontright.setDirection(DcMotor.Direction.REVERSE);
+        backright.setDirection(DcMotor.Direction.FORWARD);
+        backleft.setDirection(DcMotor.Direction.REVERSE);
+        sleep(100);
+        backleft.setPower(0.5);
+        backright.setPower(0.5);
+        frontleft.setPower(0.5);
+        frontright.setPower(0.5);
+        sleep(time);
+    }
+        private void rotatecounterclockwise(double time)
+    {
+        backleft.setPower(0);
+        backright.setPower(0);
+        frontleft.setPower(0);
+        frontright.setPower(0);
+        frontleft.setDirection(DcMotor.Direction.REVERSE);
+        frontright.setDirection(DcMotor.Direction.FORWARD);
+        backright.setDirection(DcMotor.Direction.REVERSE);
+        backleft.setDirection(DcMotor.Direction.FORWARD);
+        sleep(100);
+        backleft.setPower(0.5);
+        backright.setPower(0.5);
+        frontleft.setPower(0.5);
+        frontright.setPower(0.5);
+        sleep(time);
+    }
     private void initialization() 
     {
         frontleft.setDirection(DcMotor.Direction.FORWARD);
