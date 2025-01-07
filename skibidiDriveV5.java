@@ -38,6 +38,9 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         frontright = hardwareMap.get(DcMotor.class, "front right");
         // arm
         bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
+        bottomarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // this resets incoder so its at 0 ticks
+        bottomarm.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+        
         toparm = hardwareMap.get(DcMotor.class, "toparm");
         claw = hardwareMap.get(Servo.class, "claw");
         clawrotate = hardwareMap.get(CRServo.class, "clawrotation");
@@ -57,6 +60,22 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
        // if (opModeIsActive()) {
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
+                double CPR = 0.0;
+                double diameter = 1.0;
+                double circumference = Math.PI * diameter;
+                //get motor pos
+                int bottomArmPosition = bottomarm.getCurrentPosition();
+                double revolutions = bottomArmPosition/CPR;
+
+                double angle = revolutions * 360;
+                double angleNormalized = angle % 360;
+                double distance = circumference * revolution;
+                // Show the position of the motor on telemetry
+                telemetry.addData("Encoder Position", position);
+                telemetry.addData("Encoder Revolutions", revolutions);
+                telemetry.addData("Encoder Angle (Degrees)", angle);
+                telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+                telemetry.update();
                 // Put loop blocks here.
                 //player 1 controller variables
                 double ryJoyStickPos = this.gamepad1.right_stick_y;
