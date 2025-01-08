@@ -39,7 +39,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         // arm
         bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
         bottomarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // this resets incoder so its at 0 ticks
-        bottomarm.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+        bottomarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         toparm = hardwareMap.get(DcMotor.class, "toparm");
         claw = hardwareMap.get(Servo.class, "claw");
@@ -60,19 +60,19 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
        // if (opModeIsActive()) {
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
-                double CPR = 0.0;
+                double CPR = 10752; //537.6 * 20:1 or 400
                 double diameter = 1.0;
                 double circumference = Math.PI * diameter;
                 //get motor pos
                 int bottomArmPosition = bottomarm.getCurrentPosition();
-                double revolutions = bottomArmPosition/CPR;
+                double revolution = bottomArmPosition/CPR;
 
-                double angle = revolutions * 360;
+                double angle = revolution * 360;
                 double angleNormalized = angle % 360;
                 double distance = circumference * revolution;
                 // Show the position of the motor on telemetry
-                telemetry.addData("Encoder Position", position);
-                telemetry.addData("Encoder Revolutions", revolutions);
+                telemetry.addData("Encoder Position", bottomArmPosition);
+                telemetry.addData("Encoder Revolutions", revolution);
                 telemetry.addData("Encoder Angle (Degrees)", angle);
                 telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
                 telemetry.update();
