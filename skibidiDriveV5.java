@@ -60,22 +60,6 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
        // if (opModeIsActive()) {
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
-                double CPR = 10752; //537.6 * 20:1 or 400
-                double diameter = 1.0;
-                double circumference = Math.PI * diameter;
-                //get motor pos
-                int bottomArmPosition = bottomarm.getCurrentPosition();
-                double revolution = bottomArmPosition/CPR;
-
-                double angle = revolution * 360;
-                double angleNormalized = angle % 360;
-                double distance = circumference * revolution;
-                // Show the position of the motor on telemetry
-                telemetry.addData("Encoder Position", bottomArmPosition);
-                telemetry.addData("Encoder Revolutions", revolution);
-                telemetry.addData("Encoder Angle (Degrees)", angle);
-                telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
-                telemetry.update();
                 // Put loop blocks here.
                 //player 1 controller variables
                 double ryJoyStickPos = this.gamepad1.right_stick_y;
@@ -129,6 +113,23 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                         open();
                     }
                 }
+                //ENCODER
+                double CPR = 10752; //537.6 * 20:1 or 400
+                double diameter = 1.0;
+                double circumference = Math.PI * diameter;
+                //get motor pos
+                int bottomArmPosition = bottomarm.getCurrentPosition();
+                double revolution = bottomArmPosition/CPR;
+
+                double angle = revolution * 360;
+                double angleNormalized = angle % 360;
+                double distance = circumference * revolution;
+                // Show the position of the motor on telemetry
+                telemetry.addData("Encoder Position", bottomArmPosition);
+                telemetry.addData("Encoder Revolutions", revolution);
+                telemetry.addData("Encoder Angle (Degrees)", angle);
+                telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+                telemetry.update();
                 // Put run blocks here.
             }
        // }
