@@ -76,7 +76,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double bottomDistance = bottomCircumference * bottomRevolution;
                 //ENCODER FOR TOP ARM
 
-                double topCPR = 10752; //537.6 * 20:1 or 400
+                double topCPR = 537.6; //537.6 * 20:1 or 400
                 double topDiameter = 1.0;
                 double topCircumference = Math.PI * topDiameter;
                 //get motor pos
@@ -131,10 +131,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 {
                     rotateArmCounterClockwise();
                 }
-                if(!gamepad2.left_bumper && !gamepad2.right_bumper)
+/*              if(!gamepad2.left_bumper && !gamepad2.right_bumper)
                 {
                     clawrotate.setPower(0); // Stop claw rotation
                 }
+                */
                 if(this.gamepad2.a &&(System.currentTimeMillis() - lastClawToggle > clawToggleDelay)) // this makes it toggle able
                 {
                     clawClosed = !clawClosed; // better debounce
@@ -232,7 +233,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             frontleft.setPower(power + lpower);
             frontright.setPower(0);
         }
-        else if (power < -.2 && (lpower < -.2))//left up
+        if (power < -.2 && (lpower < -.2))//left up
         {
             //reset directions
             initialization();
@@ -258,7 +259,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             frontleft.setPower(0);
             frontright.setPower(power + lpower);
         }
-        else if (power > .2 && (lpower < -.2))//right up
+        if (power > .2 && (lpower < -.2))//right up
         {
             //reset directions
             initialization();
