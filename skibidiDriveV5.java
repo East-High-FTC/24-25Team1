@@ -66,28 +66,37 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 //ENCODER FOR BOTTOM ARM
                 double bottomCPR = 10752; //537.6 * 20:1 or 400
                 double bottomDiameter = 1.0;
-                double bottomCircumference = Math.PI * diameter;
+                double bottomCircumference = Math.PI * bottomDiameter;
                 //get motor pos
                 int bottomArmPosition = bottomarm.getCurrentPosition();
-                double bottomRevolution = bottomArmPosition/CPR;
+                double bottomRevolution = bottomArmPosition/bottomCPR;
 
-                double bottomAngle = revolution * 360;
-                double bottomAngleNormalized = angle % 360;
-                double bottomDistance = circumference * revolution;
+                double bottomAngle = bottomRevolution * 360;
+                double bottomAngleNormalized = bottomAngle % 360;
+                double bottomDistance = bottomCircumference * bottomRevolution;
                 //ENCODER FOR TOP ARM
 
                 double topCPR = 10752; //537.6 * 20:1 or 400
                 double topDiameter = 1.0;
-                double topCircumference = Math.PI * diameter;
+                double topCircumference = Math.PI * topDiameter;
                 //get motor pos
                 int topArmPosition = toparm.getCurrentPosition();
-                double topRevolution = topArmPosition/CPR;
+                double topRevolution = topArmPosition/topCPR;
 
-                double topAngle = revolution * 360;
-                double topAngleNormalized = angle % 360;
-                double topDistance = circumference * revolution;
+                double topAngle = topRevolution * 360;
+                double topAngleNormalized = topAngle % 360;
+                double topDistance = topCircumference * topRevolution;
 
-                double armRatio = bottomArmPosition/topArmPosition // bottomArm:topArm
+                double armRatio = 1;
+                
+                try{
+                    armRatio = bottomArmPosition/topArmPosition;
+                }
+                catch(Exception e)
+                {
+                    telemetry.addData("Attempted to Divide by 0", "Broken!");
+                    telemetry.update();
+                }
                 // Put loop blocks here.
                 //player 1 controller variables
                 double ryJoyStickPos = this.gamepad1.right_stick_y;
@@ -196,7 +205,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             frontleft.setPower(power);
             frontright.setPower(power);
         }
-        else if (power > 0 && (fpower > -.2 && fpower < 0.2))//right
+         if (power > 0 && (fpower > -.2 && fpower < 0.2))//right
         {
             //reset directions
             initialization();
@@ -281,19 +290,19 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         double power = Math.max(-1.0, Math.min(1.0, xpower));
 
         //set motor directions for rotation & clockwise/counter clockwise rotation
-        if(power > 0) //qlock wise
-        {
-            frontleft.setDirection(DcMotor.Direction.FORWARD);
-            backleft.setDirection(DcMotor.Direction.REVERSE); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
-            frontright.setDirection(DcMotor.Direction.REVERSE);
-            backright.setDirection(DcMotor.Direction.FORWARD); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
-        }
-        if (power <0) // kounter klock wise
+        if(power > 0) // counter qlock wise
         {
             frontleft.setDirection(DcMotor.Direction.REVERSE);
+            backleft.setDirection(DcMotor.Direction.REVERSE); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
+            frontright.setDirection(DcMotor.Direction.REVERSE);
+            backright.setDirection(DcMotor.Direction.REVERSE); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
+        }
+        if (power <0) //  klock wise
+        {
+            frontleft.setDirection(DcMotor.Direction.FORWARD);
             backleft.setDirection(DcMotor.Direction.FORWARD); //back wheels are reversed for some reason idk why just don't this or it will break IM TELLING YOU PLS PLS IOguawedghasdfuih us
             frontright.setDirection(DcMotor.Direction.FORWARD);
-            backright.setDirection(DcMotor.Direction.REVERSE); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
+            backright.setDirection(DcMotor.Direction.FORWARD); //gear is backwards which is why we have the thing go forwards for reverse (trust guys)
         }
         //set power
         backleft.setPower(Math.abs(power));
