@@ -75,7 +75,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double bottomDistance = bottomCircumference * bottomRevolution;
                 //ENCODER FOR TOP ARM
 
-                double topCPR = 134400; // 1120 cpr  * 60 = 67200 then * 2 for the bevel gear
+                double topCPR = 67200; // 1120 cpr  * 60 = 67200 then * 2 for the bevel gear
                 double topDiameter = 1.0;
                 double topCircumference = Math.PI * topDiameter;
                 //get motor pos
