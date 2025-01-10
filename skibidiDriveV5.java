@@ -63,7 +63,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
                 //ENCODER FOR BOTTOM ARM
-                double bottomCPR = 11200; // 7*28(20*20) = 11,200 cpr
+                double bottomCPR = 11200; // 
                 double bottomDiameter = 1.0;
                 double bottomCircumference = Math.PI * bottomDiameter;
                 //get motor pos
