@@ -60,11 +60,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset(); // heard thiss is good
-       // if (opModeIsActive()) {
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
                 //ENCODER FOR BOTTOM ARM
-                double bottomCPR = 10752; //537.6 * 20:1 or 400
+                double bottomCPR = 11200; // 7*28(20*20) = 11,200 cpr
                 double bottomDiameter = 1.0;
                 double bottomCircumference = Math.PI * bottomDiameter;
                 //get motor pos
@@ -76,7 +75,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double bottomDistance = bottomCircumference * bottomRevolution;
                 //ENCODER FOR TOP ARM
 
-                double topCPR = 537.6; //537.6 * 20:1 or 400
+                double topCPR = 11200; // 7*28(20*20) = 11,200 cpr this iss the same as above unless finley changed it
                 double topDiameter = 1.0;
                 double topCircumference = Math.PI * topDiameter;
                 //get motor pos
@@ -88,13 +87,18 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double topDistance = topCircumference * topRevolution;
 
                 double armRatio = 1;
-                
+
+                // limits
+                final double buffer = 50.0; // thiss is a buffer between the encoderss to help prevent mechanikal sstrain
+                final double armLim = 1000.0; // thiss iss jusst an example
+                final double bottomLim = 2800.0 - buffer;
+                final double topLim = 3733.0;
                 try{
                     armRatio = bottomArmPosition/topArmPosition;
                 }
                 catch(Exception e)
                 {
-                    telemetry.addData("Attempted to Divide by 0", "Broken!");
+                    telemetry.addData("Exception!", "Attempted to Divide by 0!");
                     telemetry.update();
                 }
                 // Put loop blocks here.
@@ -109,7 +113,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double ryJoyStickPosARM = this.gamepad2.right_stick_y;
                 double lyJoyStickPosARM = this.gamepad2.left_stick_y;
 
-                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM);
+                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM, bottomarmPosition, bottomLim);
                 bottomArmPosition = bottomarm.getCurrentPosition();
                 //player 1 inputs (driver)
                 if(this.gamepad1.b)
@@ -152,22 +156,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 // Show the position of the motor on telemetry
                 encoderElemetry(bottomArmPosition, bottomRevolution, bottomAngle, bottomAngleNormalized,
                 topArmPosition, topRevolution, topAngle, topAngleNormalized);
-                // limits
-                final double armLim = 1000.0; // thiss iss jusst an example
-                final double bottomLim = 500.0;
-                final double topLim = 500.0;
-                if(armRatio == armLim && bottomArmPosition == bottomLim)
-                {
-                    toparm.setPower(0); //since bottom is at its limit the top arm can't move (we need to tesst)
-                }
-                if(armRatio == armLim && topArmPosition == topLim)
-                {
-                    bottomarm.setPower(0);
-                }
+
             }
-       // }
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\/////////////////////////////////////////////////////////////////////////////
     // setting up motors
     private void initialization() {
         frontleft.setDirection(DcMotor.Direction.FORWARD);
@@ -360,10 +352,22 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     {
         clawrotate.setPower(-0.5);
     }
-    private void moveArm(double powerarm)
+    private void moveArm(double powerarm, double bottomarmPosition, double bottomLim)
     {
         bottomarm.setDirection(DcMotor.Direction.REVERSE);
-        bottomarm.setPower(powerarm *0.75);
+
+        if (gamepad2.ryJoyStickPosARM > 0 && bottomArmPosition < bottomLim) 
+        {
+            bottomarm.setPower(powerarm); // Move up within bounds
+        } 
+        if (gamepad2.ryJoyStickPosARM < 0 && bottomArmPosition > minLim)
+        {
+            bottomarm.setPower(powerarm); // Move down within bounds
+        } 
+        else
+        {
+            bottomarm.setPower(0); // Stop when out of bounds
+        }
     }
     private void moveForearm(double power)
     {
@@ -371,9 +375,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     }
     //make up and down on the left stick move the top half of the arm
     //make up and down on the right stick move the bottom half of the arm
-    private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM)
+    private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM,
+     double bottomarmPosition, double bottomLim,
+     double topArmPosition, double topLim)
     {
-        moveArm(ryJoyStickPosARM);
+        moveArm(ryJoyStickPosARM, bottomarmPosition, bottomLim);
         moveForearm(lyJoyStickPosARM);
         /* 
         telemetry.addData("Bottom Arm Power:", ryJoyStickPosARM);
