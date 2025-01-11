@@ -38,12 +38,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         frontright = hardwareMap.get(DcMotor.class, "front right");
         // arm
         bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
-        bottomarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // this resets incoder so its at 0 ticks
-        bottomarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         toparm = hardwareMap.get(DcMotor.class, "toparm");
-        toparm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // reset ecnoder
-        toparm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         claw = hardwareMap.get(Servo.class, "claw");
         clawrotate = hardwareMap.get(CRServo.class, "clawrotation");
@@ -60,47 +56,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset(); // heard thiss is good
+        if(opModeIsActive()){
             while (opModeIsActive()) {
                 telemetry.addData("Status","Run Time: " + runtime.toString());
-                //ENCODER FOR BOTTOM ARM
-                double bottomCPR = 1080000; // 11200 cpr *60 
-                double bottomDiameter = 1.0;
-                double bottomCircumference = Math.PI * bottomDiameter;
-                //get motor pos
-                int bottomArmPosition = bottomarm.getCurrentPosition();
-                double bottomRevolution = bottomArmPosition/bottomCPR;
 
-                double bottomAngle = bottomRevolution * 360;
-                double bottomAngleNormalized = bottomAngle % 360;
-                double bottomDistance = bottomCircumference * bottomRevolution;
-                //ENCODER FOR TOP ARM
-
-                double topCPR = 67200; // 1120 cpr  * 60 = 67200 then * 2 for the bevel gear
-                double topDiameter = 1.0;
-                double topCircumference = Math.PI * topDiameter;
-                //get motor pos
-                int topArmPosition = toparm.getCurrentPosition();
-                double topRevolution = topArmPosition/topCPR;
-
-                double topAngle = topRevolution * 360;
-                double topAngleNormalized = topAngle % 360;
-                double topDistance = topCircumference * topRevolution;
-
-                double armRatio = 1;
-
-                // limits
-                final double buffer = 50.0; // thiss is a buffer between the encoderss to help prevent mechanikal sstrain
-                final double armLim = 1000.0; // thiss iss jusst an example
-                final double bottomLim = 2800.0 - buffer;
-                final double topLim = 3733.0 - buffer; //Lim = 373.33 * angle degree
-                try{
-                    armRatio = bottomArmPosition/topArmPosition;
-                }
-                catch(Exception e)
-                {
-                    telemetry.addData("Exception!", "Attempted to Divide by 0!");
-                    telemetry.update();
-                }
                 // Put loop blocks here.
                 //player 1 controller variables
                 double ryJoyStickPos = this.gamepad1.right_stick_y;
@@ -113,8 +72,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double ryJoyStickPosARM = this.gamepad2.right_stick_y;
                 double lyJoyStickPosARM = this.gamepad2.left_stick_y;
 
-                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM, bottomArmPosition, bottomLim, topArmPosition, topLim);
-                bottomArmPosition = bottomarm.getCurrentPosition();
+                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM);
                 //player 1 inputs (driver)
                 if(this.gamepad1.b)
                 {
@@ -154,10 +112,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                     }
                 }
                 // Show the position of the motor on telemetry
-                encoderElemetry(bottomArmPosition, bottomRevolution, bottomAngle, bottomAngleNormalized,
-                topArmPosition, topRevolution, topAngle, topAngleNormalized);
-
             }
+         }
     }
 ////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\/////////////////////////////////////////////////////////////////////////////
     // setting up motors
@@ -352,22 +308,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     {
         clawrotate.setPower(-0.5);
     }
-    private void moveArm(double powerarm, double bottomarmPosition, double bottomLim)
+    private void moveArm(double powerarm)
     {
         bottomarm.setDirection(DcMotor.Direction.REVERSE);
-
-        if (powerarm> 0 && bottomarmPosition < bottomLim) 
-        {
-            bottomarm.setPower(powerarm); // Move up within bounds
-        } 
-        if (powerarm < 0 && bottomarmPosition > bottomLim)
-        {
-            bottomarm.setPower(powerarm); // Move down within bounds
-        } 
-        else
-        {
-            bottomarm.setPower(0); // Stop when out of bounds
-        }
+        bottomarm.setPower(powerarm);
     }
     private void moveForearm(double power)
     {
@@ -375,33 +319,14 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     }
     //make up and down on the left stick move the top half of the arm
     //make up and down on the right stick move the bottom half of the arm
-    private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM,
-     double bottomarmPosition, double bottomLim,
-     double topArmPosition, double topLim)
+    private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM)
     {
-        moveArm(ryJoyStickPosARM, bottomarmPosition, bottomLim);
+        moveArm(ryJoyStickPosARM);
         moveForearm(lyJoyStickPosARM);
         /* 
         telemetry.addData("Bottom Arm Power:", ryJoyStickPosARM);
         telemetry.addData("Top Arm Power:", lyJoyStickPosARM);
         telemetry.update();
         */
-    }
-    private void encoderElemetry(double bottomArmPosition, double bottomRevolution,
-                                 double bottomAngle, double bottomAngleNormalized,
-                                 double topArmPosition, double topRevolution,
-                                 double topAngle, double topAngleNormalized
-    )
-    {
-        telemetry.addData("Bottom Encoder Position", bottomArmPosition);
-        telemetry.addData("Bottom Encoder Revolutions", bottomRevolution);
-        telemetry.addData("Bottom Encoder Angle (Degrees)", bottomAngle);
-        telemetry.addData("Bottom Encoder Angle - Normalized (Degrees)", bottomAngleNormalized);
-
-        telemetry.addData("Top Encoder Position", topArmPosition);
-        telemetry.addData("Top Encoder Revolutions", topRevolution);
-        telemetry.addData("Top Encoder Angle (Degrees)", topAngle);
-        telemetry.addData("Top Encoder Angle - Normalized (Degrees)", topAngleNormalized);
-        telemetry.update();
     }
 }
