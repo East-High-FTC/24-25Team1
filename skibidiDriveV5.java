@@ -173,8 +173,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
             //reset directions
             initialization();
-            frontleft.setDirection(DcMotor.Direction.REVERSE);
-            backright.setDirection(DcMotor.Direction.FORWARD);
+            frontleft.setDirection(DcMotor.Direction.FORWARD);
+            backright.setDirection(DcMotor.Direction.REVERSE);
 
             backleft.setPower(0);
             backright.setPower(power + lpower);
@@ -185,8 +185,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
             //reset directions
             initialization();
-            frontright.setDirection(DcMotor.Direction.REVERSE);
-            backleft.setDirection(DcMotor.Direction.FORWARD);
+            frontright.setDirection(DcMotor.Direction.FORWARD);
+            backleft.setDirection(DcMotor.Direction.REVERSE);
             backleft.setPower(power + lpower);
             backright.setPower(0);
             frontleft.setPower(0);
@@ -199,8 +199,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
             //reset directions
             initialization();
-            frontright.setDirection(DcMotor.Direction.FORWARD);
-            backleft.setDirection(DcMotor.Direction.REVERSE);
+            frontright.setDirection(DcMotor.Direction.REVERSE);
+            backleft.setDirection(DcMotor.Direction.FORWARD);
 
             backleft.setPower(power + lpower);
             backright.setPower(0);
@@ -211,8 +211,8 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         {
             //reset directions
             initialization();
-            frontleft.setDirection(DcMotor.Direction.FORWARD);
-            backright.setDirection(DcMotor.Direction.REVERSE);
+            frontleft.setDirection(DcMotor.Direction.REVERSE);
+            backright.setDirection(DcMotor.Direction.FORWARD);
             backleft.setPower(0);
             backright.setPower(power + lpower);
             frontleft.setPower(power + lpower);
