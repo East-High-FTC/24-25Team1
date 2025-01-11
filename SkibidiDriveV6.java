@@ -141,10 +141,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         initialization();
         if(dpower == 0)
         {
-            backleft.setPower(power);
-            backright.setPower(power);
-            frontleft.setPower(power);
-            frontright.setPower(power);
+            backleft.setPower(power*power);
+            backright.setPower(power*power);
+            frontleft.setPower(power*power);
+            frontright.setPower(power*power);
 
             telemetry.addData("Motor Power", frontleft.getPower());
             telemetry.addData("Motor Power", frontright.getPower());
@@ -161,10 +161,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             frontleft.setDirection(DcMotor.Direction.REVERSE);
             backright.setDirection(DcMotor.Direction.FORWARD);
 
-            backleft.setPower(power);
-            backright.setPower(power);
-            frontleft.setPower(power);
-            frontright.setPower(power);
+            backleft.setPower(power*power);
+            backright.setPower(power*power);
+            frontleft.setPower(power*power);
+            frontright.setPower(power*power);
         }
          if (power > 0 && (fpower > -.2 && fpower < 0.2))//right
         {
@@ -172,10 +172,10 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
             initialization();
             frontleft.setDirection(DcMotor.Direction.REVERSE);
             backright.setDirection(DcMotor.Direction.FORWARD);
-            backleft.setPower(power);
-            backright.setPower(power);
-            frontleft.setPower(power);
-            frontright.setPower(power);
+            backleft.setPower(power*power);
+            backright.setPower(power*power);
+            frontleft.setPower(power*power);
+            frontright.setPower(power*power);
         }
     }
     //stuff evan made
