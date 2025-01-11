@@ -20,7 +20,6 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         private DcMotor frontright = null;
         //arm stuff
         private DcMotor bottomarm = null;
-        private DcMotor toparm = null;
         private Servo claw = null;
         private CRServo clawrotate = null;
         private ElapsedTime runtime = new ElapsedTime();
@@ -41,8 +40,6 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         // arm
         bottomarm = hardwareMap.get(DcMotor.class, "bottomarm");
         
-        toparm = hardwareMap.get(DcMotor.class, "toparm");
-
         claw = hardwareMap.get(Servo.class, "claw");
         clawrotate = hardwareMap.get(CRServo.class, "clawrotation");
         // Put initialization blocks here. aka configuring motor stuff
@@ -303,8 +300,6 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     //setup motors dont forget to add the armInitialization() earlier
     private void armInitialization() {
         bottomarm.setDirection(DcMotor.Direction.FORWARD);
-        toparm.setDirection(DcMotor.Direction.FORWARD);
-        toparm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         claw.setPosition(1);
         //clawrotate.setPower(0);
     }
@@ -321,16 +316,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
         bottomarm.setDirection(DcMotor.Direction.REVERSE);
         bottomarm.setPower(powerarm);
     }
-    private void moveForearm(double power)
-    {
-        toparm.setPower(power *.4);
-    }
     //make up and down on the left stick move the top half of the arm
     //make up and down on the right stick move the bottom half of the arm
     private void setUpArmInputs(double ryJoyStickPosARM, double lyJoyStickPosARM)
     {
         moveArm(ryJoyStickPosARM);
-        moveForearm(lyJoyStickPosARM);
         /* 
         telemetry.addData("Bottom Arm Power:", ryJoyStickPosARM);
         telemetry.addData("Top Arm Power:", lyJoyStickPosARM);
