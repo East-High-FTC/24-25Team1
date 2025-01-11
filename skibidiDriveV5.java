@@ -113,7 +113,7 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
                 double ryJoyStickPosARM = this.gamepad2.right_stick_y;
                 double lyJoyStickPosARM = this.gamepad2.left_stick_y;
 
-                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM, bottomarmPosition, bottomLim);
+                setUpArmInputs(ryJoyStickPosARM, lyJoyStickPosARM, bottomArmPosition, bottomLim, topArmPosition, topLim);
                 bottomArmPosition = bottomarm.getCurrentPosition();
                 //player 1 inputs (driver)
                 if(this.gamepad1.b)
@@ -356,11 +356,11 @@ public class SkibidiDriveBuiltBackBetter extends LinearOpMode {
     {
         bottomarm.setDirection(DcMotor.Direction.REVERSE);
 
-        if (gamepad2.ryJoyStickPosARM > 0 && bottomArmPosition < bottomLim) 
+        if (powerarm> 0 && bottomarmPosition < bottomLim) 
         {
             bottomarm.setPower(powerarm); // Move up within bounds
         } 
-        if (gamepad2.ryJoyStickPosARM < 0 && bottomArmPosition > minLim)
+        if (powerarm < 0 && bottomarmPosition > bottomLim)
         {
             bottomarm.setPower(powerarm); // Move down within bounds
         } 
